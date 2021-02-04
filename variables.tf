@@ -81,8 +81,13 @@ variable "s3_log_prefix" {
   type        = string
 }
 
-variable "s3_zip_path" {
-  description = "Path within S3 bucket to the playbook zip file"
+variable "s3_ansible_zip_name" {
+  description = "Name of the Ansible zip file"
+  type        = string
+}
+
+variable "s3_ansible_zip_prefix" {
+  description = "Prefix within S3 bucket where the zip will be found"
   type        = string
 }
 

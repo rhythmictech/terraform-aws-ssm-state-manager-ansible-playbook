@@ -1,3 +1,5 @@
+data "aws_region" "current" {}
+
 locals {
   verbosity_map = {
     default = "-v"
@@ -38,7 +40,7 @@ resource "aws_ssm_association" "this" {
 
   parameters = {
     SourceType          = ["S3"]
-    SourceInfo          = [{ path = "https://${aws_s3_bucket.this.id}.s3.amazonaws.com/${var.s3_zip_path}" }]
+    SourceInfo          = [{ path = "https://${aws_s3_bucket.this.id}.s3.amazonaws.com/${var.s3_ansible_zip_prefix}/${var.s3_ansible_zip_name}" }]
     InstallDependencies = ["True"]
     PlaybookFile        = [var.playbook_file_name]
     ExtraVariables      = [join(" ", var.ansible_extra_vars)]
@@ -57,3 +59,5 @@ resource "aws_iam_user" "this" {
   path = "/github/"
   tags = var.tags
 }
+
+# TODO: Actually add policy for IAM User

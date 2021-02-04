@@ -1,5 +1,5 @@
 # terraform-aws-ssm-state-manager-ansible-playbook
-Template repository for terraform modules. Good for any cloud and any provider.
+Terraform module that sets up the needed resources for an SSM State Manager association.
 
 [![tflint](https://github.com/rhythmictech/terraform-aws-ssm-state-manager-ansible-playbook/workflows/tflint/badge.svg?branch=master&event=push)](https://github.com/rhythmictech/terraform-aws-ssm-state-manager-ansible-playbook/actions?query=workflow%3Atflint+event%3Apush+branch%3Amaster)
 [![tfsec](https://github.com/rhythmictech/terraform-aws-ssm-state-manager-ansible-playbook/workflows/tfsec/badge.svg?branch=master&event=push)](https://github.com/rhythmictech/terraform-aws-ssm-state-manager-ansible-playbook/actions?query=workflow%3Atfsec+event%3Apush+branch%3Amaster)
@@ -9,15 +9,20 @@ Template repository for terraform modules. Good for any cloud and any provider.
 <a href="https://twitter.com/intent/follow?screen_name=RhythmicTech"><img src="https://img.shields.io/twitter/follow/RhythmicTech?style=social&logo=twitter" alt="follow on Twitter"></a>
 
 ## Example
-Here's what using the module will look like
-```hcl
-module "example" {
-  source = "rhythmictech/terraform-mycloud-mymodule
-}
-```
+N/A for now
 
 ## About
-A bit about this module
+Terraform module that sets up the needed resources for an SSM State Manager association.
+
+## Additional Setup
+After running this module, you'll need to set up a GitHub action in the repo that houses your Ansible playbook for building the zip file. You can use [action.yml](action.yml) as a template. This template requires the following secrets be set:
+
+Required:
+- `AWS_S3_ANSIBLE_BUCKET` (Available as a Terraform output)
+- `AWS_ACCESS_KEY_ID` (Must create credentials for the user created by Terraform)
+- `AWS_SECRET_ACCESS_KEY` (Must create credentials for the user created by Terraform)
+- `AWS_DEFAULT_REGION` (Available as a Terraform output)
+- `AWS_S3_ANSIBLE_PREFIX` (Must match the )
 
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Requirements
@@ -39,7 +44,8 @@ A bit about this module
 |------|-------------|------|---------|:--------:|
 | github\_iam\_user\_name | The name to assign to the IAM user that Github will authenticate with | `string` | n/a | yes |
 | name | Moniker to apply to all resources in the module | `string` | n/a | yes |
-| s3\_zip\_path | Path within S3 bucket to the playbook zip file | `string` | n/a | yes |
+| s3\_ansible\_zip\_name | Name of the Ansible zip file | `string` | n/a | yes |
+| s3\_ansible\_zip\_prefix | Prefix within S3 bucket where the zip will be found | `string` | n/a | yes |
 | target\_tag\_key | The AWS Tag key that you want to target for running the playbook | `string` | n/a | yes |
 | ansible\_check\_mode | Whether or not the playbook should run in `check` mode | `bool` | `false` | no |
 | ansible\_extra\_vars | A list of KEY=VALUE strings defining extra vars to pass to Ansible | `list(string)` | `[]` | no |
@@ -60,6 +66,8 @@ A bit about this module
 | Name | Description |
 |------|-------------|
 | github\_iam\_user\_name | Username of the IAM user to be used in GitHub Actions |
+| region | The region used when running this module. |
+| s3\_ansible\_bucket | S3 bucket created for Ansible zip artifacts |
 | state\_manager\_association\_id | The id of the state manager association |
 
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
