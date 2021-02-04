@@ -22,26 +22,39 @@ A bit about this module
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Requirements
 
-| Name      | Version   |
-|-----------|-----------|
+| Name | Version |
+|------|---------|
 | terraform | >= 0.13.5 |
+| aws | >= 3.0.0 |
 
 ## Providers
 
-No provider.
+| Name | Version |
+|------|---------|
+| aws | >= 3.0.0 |
 
 ## Inputs
 
-| Name | Description                                     | Type          | Default | Required |
-|------|-------------------------------------------------|---------------|---------|:--------:|
-| name | Moniker to apply to all resources in the module | `string`      | n/a     |   yes    |
-| tags | User-Defined tags                               | `map(string)` | `{}`    |    no    |
+| Name | Description | Type | Default | Required |
+|------|-------------|------|---------|:--------:|
+| name | Moniker to apply to all resources in the module | `string` | n/a | yes |
+| target\_tag\_key | The AWS Tag key that you want to target for running the playbook | `string` | n/a | yes |
+| ansible\_check\_mode | Whether or not the playbook should run in `check` mode | `bool` | `false` | no |
+| ansible\_extra\_vars | A list of KEY=VALUE strings defining extra vars to pass to Ansible | `list(string)` | `[]` | no |
+| ansible\_verbosity | How verbose do you want the Ansible output to be? Valid values are `default`, `more`, and `debug` | `string` | `"default"` | no |
+| compliance\_severity | The compliance severity of this State Manager association. Allowed values are `UNSPECIFIED`, `LOW`, `MEDIUM`, or `CRITICAL` | `string` | `"UNSPECIFIED"` | no |
+| log\_bucket\_name | Name of existing bucket to use for logging | `string` | `null` | no |
+| max\_concurrency | The maximum number of targets allowed to run the association at the same time. You can specify a number, for example 10, or a percentage of the target set, for example 10%. | `string` | `null` | no |
+| max\_errors | The number of errors that are allowed before the system stops sending requests to run the association on additional targets. You can specify a number, for example 10, or a percentage of the target set, for example 10%. | `string` | `null` | no |
+| playbook\_file\_name | Name of the playbook file | `string` | `"provision.yml"` | no |
+| s3\_log\_prefix | Path prefix where logs will be stored in S3 | `string` | `"logs/state_manager"` | no |
+| schedule\_expression | A 6-field cron expression when the association will be applied to the target(s) | `string` | `null` | no |
+| tags | User-Defined tags | `map(string)` | `{}` | no |
+| target\_tag\_value | The AWS Tag value that you want to target for running the playbook. If omitted any instance with the key will be targetted regardless of value | `string` | `null` | no |
 
 ## Outputs
 
-| Name         | Description                  |
-|--------------|------------------------------|
-| tags\_module | Tags Module in it's entirety |
+No output.
 
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 
