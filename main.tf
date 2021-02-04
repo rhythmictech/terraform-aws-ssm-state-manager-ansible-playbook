@@ -60,4 +60,25 @@ resource "aws_iam_user" "this" {
   tags = var.tags
 }
 
-# TODO: Actually add policy for IAM User
+data "aws_iam_policy_document" "this" {
+  statement {
+    actions = [
+      "S3:PutObject",
+      "S3:PutObjectTagging"
+    ]
+
+    resources = ["${aws_s3_bucket.this.arn}/${var.s3_ansible_zip_prefix}/*"]
+  }
+}
+
+resource "aws_iam_policy" "this" {
+  name_prefix = var.name
+  description = "IAM policy for GitHub Actions to push files to S3 for State Manager"
+  path        = "/github/"
+  policy      = data.aws_iam_policy_document.this.json
+}
+
+resource "aws_iam_user_policy_attachment" "this" {
+  user       = aws_iam_user.this.name
+  policy_arn = aws_iam_policy.this.arn
+}
