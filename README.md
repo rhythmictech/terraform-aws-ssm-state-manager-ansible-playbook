@@ -37,7 +37,9 @@ A bit about this module
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
+| github\_iam\_user\_name | The name to assign to the IAM user that Github will authenticate with | `string` | n/a | yes |
 | name | Moniker to apply to all resources in the module | `string` | n/a | yes |
+| s3\_zip\_path | Path within S3 bucket to the playbook zip file | `string` | n/a | yes |
 | target\_tag\_key | The AWS Tag key that you want to target for running the playbook | `string` | n/a | yes |
 | ansible\_check\_mode | Whether or not the playbook should run in `check` mode | `bool` | `false` | no |
 | ansible\_extra\_vars | A list of KEY=VALUE strings defining extra vars to pass to Ansible | `list(string)` | `[]` | no |
@@ -55,7 +57,10 @@ A bit about this module
 
 ## Outputs
 
-No output.
+| Name | Description |
+|------|-------------|
+| github\_iam\_user\_name | Username of the IAM user to be used in GitHub Actions |
+| state\_manager\_association\_id | The id of the state manager association |
 
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 

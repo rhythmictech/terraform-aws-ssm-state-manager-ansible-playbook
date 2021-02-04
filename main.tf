@@ -36,7 +36,7 @@ resource "aws_ssm_association" "this" {
     s3_key_prefix  = var.s3_log_prefix
   }
 
-  parameters {
+  parameters = {
     SourceType          = ["S3"]
     SourceInfo          = [{ path = "https://${aws_s3_bucket.this.id}.s3.amazonaws.com/${var.s3_zip_path}" }]
     InstallDependencies = ["True"]
@@ -50,4 +50,10 @@ resource "aws_ssm_association" "this" {
     key    = "tag:${var.target_tag_key}"
     values = [var.target_tag_value]
   }
+}
+
+resource "aws_iam_user" "this" {
+  name = var.github_iam_user_name
+  path = "/github/"
+  tags = var.tags
 }

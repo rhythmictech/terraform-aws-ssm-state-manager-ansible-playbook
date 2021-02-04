@@ -81,6 +81,11 @@ variable "s3_log_prefix" {
   type        = string
 }
 
+variable "s3_zip_path" {
+  description = "Path within S3 bucket to the playbook zip file"
+  type        = string
+}
+
 variable "schedule_expression" {
   default     = null
   description = "A 6-field cron expression when the association will be applied to the target(s)"
@@ -95,5 +100,14 @@ variable "target_tag_key" {
 variable "target_tag_value" {
   default     = null
   description = "The AWS Tag value that you want to target for running the playbook. If omitted any instance with the key will be targetted regardless of value"
+  type        = string
+}
+
+########################################
+# IAM User Vars
+########################################
+
+variable "github_iam_user_name" {
+  description = "The name to assign to the IAM user that Github will authenticate with"
   type        = string
 }
