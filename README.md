@@ -15,9 +15,9 @@ N/A for now
 Terraform module that sets up the needed resources for an SSM State Manager association.
 
 ## Additional Setup
-After running this module, you'll need to set up a GitHub action in the repo that houses your Ansible playbook for building the zip file. You can use [action.yml](action.yml) as a template. This template requires the following secrets be set:
+Whatever Instances this is running against need IAM permissions to write to the bucket you're logging to (either created by this module or external), the SSM agent, IAM permissions to talk to SSM, and network permissions to talk to SSM.
 
-Required:
+After running this module, you'll need to set up a GitHub action in the repo that houses your Ansible playbook for building the zip file. You can use [action.yml](action.yml) as a template. This template requires the following secrets be set:
 - `AWS_S3_ANSIBLE_BUCKET` (Available as a Terraform output)
 - `AWS_ACCESS_KEY_ID` (Must create credentials for the user created by Terraform)
 - `AWS_SECRET_ACCESS_KEY` (Must create credentials for the user created by Terraform)
@@ -27,48 +27,48 @@ Required:
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Requirements
 
-| Name | Version |
-|------|---------|
+| Name      | Version   |
+|-----------|-----------|
 | terraform | >= 0.13.5 |
-| aws | >= 3.0.0 |
+| aws       | >= 3.0.0  |
 
 ## Providers
 
-| Name | Version |
-|------|---------|
-| aws | >= 3.0.0 |
+| Name | Version  |
+|------|----------|
+| aws  | >= 3.0.0 |
 
 ## Inputs
 
-| Name | Description | Type | Default | Required |
-|------|-------------|------|---------|:--------:|
-| github\_iam\_user\_name | The name to assign to the IAM user that Github will authenticate with | `string` | n/a | yes |
-| name | Moniker to apply to all resources in the module | `string` | n/a | yes |
-| s3\_ansible\_zip\_name | Name of the Ansible zip file | `string` | n/a | yes |
-| s3\_ansible\_zip\_prefix | Prefix within S3 bucket where the zip will be found | `string` | n/a | yes |
-| target\_tag\_key | The AWS Tag key that you want to target for running the playbook | `string` | n/a | yes |
-| ansible\_check\_mode | Whether or not the playbook should run in `check` mode | `bool` | `false` | no |
-| ansible\_extra\_vars | A list of KEY=VALUE strings defining extra vars to pass to Ansible | `list(string)` | `[]` | no |
-| ansible\_verbosity | How verbose do you want the Ansible output to be? Valid values are `default`, `more`, and `debug` | `string` | `"default"` | no |
-| compliance\_severity | The compliance severity of this State Manager association. Allowed values are `UNSPECIFIED`, `LOW`, `MEDIUM`, or `CRITICAL` | `string` | `"UNSPECIFIED"` | no |
-| log\_bucket\_name | Name of existing bucket to use for logging | `string` | `null` | no |
-| max\_concurrency | The maximum number of targets allowed to run the association at the same time. You can specify a number, for example 10, or a percentage of the target set, for example 10%. | `string` | `null` | no |
-| max\_errors | The number of errors that are allowed before the system stops sending requests to run the association on additional targets. You can specify a number, for example 10, or a percentage of the target set, for example 10%. | `string` | `null` | no |
-| playbook\_file\_name | Name of the playbook file | `string` | `"provision.yml"` | no |
-| s3\_kms\_master\_key\_id | The AWS KMS master key ID used for the SSE-KMS encryption. The default aws/s3 AWS KMS master key is used if this element is absent. | `string` | `null` | no |
-| s3\_log\_prefix | Path prefix where logs will be stored in S3 | `string` | `"logs/state_manager"` | no |
-| schedule\_expression | A 6-field cron expression when the association will be applied to the target(s) | `string` | `null` | no |
-| tags | User-Defined tags | `map(string)` | `{}` | no |
-| target\_tag\_value | The AWS Tag value that you want to target for running the playbook. If omitted any instance with the key will be targetted regardless of value | `string` | `null` | no |
+| Name                     | Description                                                                                                                                                                                                                | Type           | Default                | Required |
+|--------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------|------------------------|:--------:|
+| github\_iam\_user\_name  | The name to assign to the IAM user that Github will authenticate with                                                                                                                                                      | `string`       | n/a                    |   yes    |
+| name                     | Moniker to apply to all resources in the module                                                                                                                                                                            | `string`       | n/a                    |   yes    |
+| s3\_ansible\_zip\_name   | Name of the Ansible zip file                                                                                                                                                                                               | `string`       | n/a                    |   yes    |
+| s3\_ansible\_zip\_prefix | Prefix within S3 bucket where the zip will be found                                                                                                                                                                        | `string`       | n/a                    |   yes    |
+| target\_tag\_key         | The AWS Tag key that you want to target for running the playbook                                                                                                                                                           | `string`       | n/a                    |   yes    |
+| ansible\_check\_mode     | Whether or not the playbook should run in `check` mode                                                                                                                                                                     | `bool`         | `false`                |    no    |
+| ansible\_extra\_vars     | A list of KEY=VALUE strings defining extra vars to pass to Ansible                                                                                                                                                         | `list(string)` | `[]`                   |    no    |
+| ansible\_verbosity       | How verbose do you want the Ansible output to be? Valid values are `default`, `more`, and `debug`                                                                                                                          | `string`       | `"default"`            |    no    |
+| compliance\_severity     | The compliance severity of this State Manager association. Allowed values are `UNSPECIFIED`, `LOW`, `MEDIUM`, or `CRITICAL`                                                                                                | `string`       | `"UNSPECIFIED"`        |    no    |
+| log\_bucket\_name        | Name of existing bucket to use for logging                                                                                                                                                                                 | `string`       | `null`                 |    no    |
+| max\_concurrency         | The maximum number of targets allowed to run the association at the same time. You can specify a number, for example 10, or a percentage of the target set, for example 10%.                                               | `string`       | `null`                 |    no    |
+| max\_errors              | The number of errors that are allowed before the system stops sending requests to run the association on additional targets. You can specify a number, for example 10, or a percentage of the target set, for example 10%. | `string`       | `null`                 |    no    |
+| playbook\_file\_name     | Name of the playbook file                                                                                                                                                                                                  | `string`       | `"provision.yml"`      |    no    |
+| s3\_kms\_master\_key\_id | The AWS KMS master key ID used for the SSE-KMS encryption. The default aws/s3 AWS KMS master key is used if this element is absent.                                                                                        | `string`       | `null`                 |    no    |
+| s3\_log\_prefix          | Path prefix where logs will be stored in S3                                                                                                                                                                                | `string`       | `"logs/state_manager"` |    no    |
+| schedule\_expression     | A 6-field cron expression when the association will be applied to the target(s)                                                                                                                                            | `string`       | `null`                 |    no    |
+| tags                     | User-Defined tags                                                                                                                                                                                                          | `map(string)`  | `{}`                   |    no    |
+| target\_tag\_value       | The AWS Tag value that you want to target for running the playbook. If omitted any instance with the key will be targetted regardless of value                                                                             | `string`       | `null`                 |    no    |
 
 ## Outputs
 
-| Name | Description |
-|------|-------------|
-| github\_iam\_user\_name | Username of the IAM user to be used in GitHub Actions |
-| region | The region used when running this module. |
-| s3\_ansible\_bucket | S3 bucket created for Ansible zip artifacts |
-| state\_manager\_association\_id | The id of the state manager association |
+| Name                            | Description                                           |
+|---------------------------------|-------------------------------------------------------|
+| github\_iam\_user\_name         | Username of the IAM user to be used in GitHub Actions |
+| region                          | The region used when running this module.             |
+| s3\_ansible\_bucket             | S3 bucket created for Ansible zip artifacts           |
+| state\_manager\_association\_id | The id of the state manager association               |
 
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 
