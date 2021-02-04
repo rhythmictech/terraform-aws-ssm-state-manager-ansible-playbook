@@ -43,7 +43,7 @@ resource "aws_ssm_association" "this" {
     PlaybookFile        = [var.playbook_file_name]
     ExtraVariables      = [join(" ", var.ansible_extra_vars)]
     Check               = [(var.ansible_check_mode ? "True" : "False")]
-    Verbose             = [local.verbosity_map[var.ansible_verbosity]]
+    Verbose             = local.verbosity_map[var.ansible_verbosity]
   }
 
   targets {
