@@ -32,7 +32,7 @@ resource "aws_ssm_association" "this" {
 
 
   output_location {
-    s3_bucket_name = coalesce(var.log_bucket_name, aws_s3_bucket.this.name)
+    s3_bucket_name = coalesce(var.log_bucket_name, aws_s3_bucket.this.id)
     s3_key_prefix  = var.s3_log_prefix
   }
 
