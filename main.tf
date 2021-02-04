@@ -39,12 +39,12 @@ resource "aws_ssm_association" "this" {
   }
 
   parameters = {
-    SourceType          = ["S3"]
-    SourceInfo          = [{ path = "https://${aws_s3_bucket.this.id}.s3.amazonaws.com/${var.s3_ansible_zip_prefix}/${var.s3_ansible_zip_name}" }]
-    InstallDependencies = ["True"]
-    PlaybookFile        = [var.playbook_file_name]
-    ExtraVariables      = [join(" ", var.ansible_extra_vars)]
-    Check               = [(var.ansible_check_mode ? "True" : "False")]
+    SourceType          = "S3"
+    SourceInfo          = { path = "https://${aws_s3_bucket.this.id}.s3.amazonaws.com/${var.s3_ansible_zip_prefix}/${var.s3_ansible_zip_name}" }
+    InstallDependencies = "True"
+    PlaybookFile        = var.playbook_file_name
+    ExtraVariables      = join(" ", var.ansible_extra_vars)
+    Check               = (var.ansible_check_mode ? "True" : "False")
     Verbose             = local.verbosity_map[var.ansible_verbosity]
   }
 
