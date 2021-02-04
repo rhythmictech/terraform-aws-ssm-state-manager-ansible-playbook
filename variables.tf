@@ -17,6 +17,12 @@ variable "tags" {
 # S3 Bucket Vars
 ########################################
 
+variable "s3_kms_master_key_id" {
+  default     = null
+  description = "The AWS KMS master key ID used for the SSE-KMS encryption. The default aws/s3 AWS KMS master key is used if this element is absent."
+  type        = string
+}
+
 ########################################
 # State Manager Vars
 ########################################

@@ -6,8 +6,20 @@ locals {
   }
 }
 
+# tfsec:ignore:AWS002
 resource "aws_s3_bucket" "this" {
+  bucket_prefix = substr(var.name, 0, 37)
+  tags          = var.tags
 
+
+  server_side_encryption_configuration {
+    rule {
+      apply_server_side_encryption_by_default {
+        sse_algorithm     = "aws:kms"
+        kms_master_key_id = var.s3_kms_master_key_id
+      }
+    }
+  }
 }
 
 resource "aws_ssm_association" "this" {
@@ -26,7 +38,7 @@ resource "aws_ssm_association" "this" {
 
   parameters {
     SourceType          = ["S3"]
-    SourceInfo          = [{ path = "https://${aws_s3_bucket.this.name}.s3.amazonaws.com/${var.s3_zip_path}" }]
+    SourceInfo          = [{ path = "https://${aws_s3_bucket.this.id}.s3.amazonaws.com/${var.s3_zip_path}" }]
     InstallDependencies = ["True"]
     PlaybookFile        = [var.playbook_file_name]
     ExtraVariables      = [join(" ", var.ansible_extra_vars)]

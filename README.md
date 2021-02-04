@@ -47,6 +47,7 @@ A bit about this module
 | max\_concurrency | The maximum number of targets allowed to run the association at the same time. You can specify a number, for example 10, or a percentage of the target set, for example 10%. | `string` | `null` | no |
 | max\_errors | The number of errors that are allowed before the system stops sending requests to run the association on additional targets. You can specify a number, for example 10, or a percentage of the target set, for example 10%. | `string` | `null` | no |
 | playbook\_file\_name | Name of the playbook file | `string` | `"provision.yml"` | no |
+| s3\_kms\_master\_key\_id | The AWS KMS master key ID used for the SSE-KMS encryption. The default aws/s3 AWS KMS master key is used if this element is absent. | `string` | `null` | no |
 | s3\_log\_prefix | Path prefix where logs will be stored in S3 | `string` | `"logs/state_manager"` | no |
 | schedule\_expression | A 6-field cron expression when the association will be applied to the target(s) | `string` | `null` | no |
 | tags | User-Defined tags | `map(string)` | `{}` | no |
