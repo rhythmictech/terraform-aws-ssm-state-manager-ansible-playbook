@@ -6,6 +6,8 @@ locals {
     more    = "-vvv"
     debug   = "-vvvv"
   }
+
+  log_bucket_name = coalesce(var.log_bucket_name, aws_s3_bucket.this.id)
 }
 
 # tfsec:ignore:AWS002
@@ -34,7 +36,7 @@ resource "aws_ssm_association" "this" {
 
 
   output_location {
-    s3_bucket_name = coalesce(var.log_bucket_name, aws_s3_bucket.this.id)
+    s3_bucket_name = local.log_bucket_name
     s3_key_prefix  = var.s3_log_prefix
   }
 
@@ -60,7 +62,7 @@ resource "aws_iam_user" "this" {
   tags = var.tags
 }
 
-data "aws_iam_policy_document" "this" {
+data "aws_iam_policy_document" "gh_action" {
   statement {
     actions = [
       "S3:PutObject",
@@ -71,14 +73,36 @@ data "aws_iam_policy_document" "this" {
   }
 }
 
-resource "aws_iam_policy" "this" {
+resource "aws_iam_policy" "gh_action" {
   name_prefix = var.name
   description = "IAM policy for GitHub Actions to push files to S3 for State Manager"
-  path        = "/github/"
-  policy      = data.aws_iam_policy_document.this.json
+  path        = "/${var.name}/"
+  policy      = data.aws_iam_policy_document.gh_action.json
 }
 
 resource "aws_iam_user_policy_attachment" "this" {
   user       = aws_iam_user.this.name
-  policy_arn = aws_iam_policy.this.arn
+  policy_arn = aws_iam_policy.gh_action.arn
+}
+
+data "aws_s3_bucket" "logging" {
+  bucket = local.log_bucket_name
+}
+
+data "aws_iam_policy_document" "instances" {
+  statement {
+    actions = [
+      "S3:PutObject",
+      "S3:PutObjectTagging"
+    ]
+
+    resources = ["${data.aws_s3_bucket.logging.arn}/${var.s3_log_prefix}/*"]
+  }
+}
+
+resource "aws_iam_policy" "instances" {
+  name_prefix = var.name
+  description = "IAM policy for GitHub Actions to push files to S3 for State Manager"
+  path        = "/${var.name}/"
+  policy      = data.aws_iam_policy_document.instances.json
 }

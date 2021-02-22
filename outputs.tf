@@ -17,3 +17,8 @@ output "region" {
   description = "The region used when running this module."
   value       = data.aws_region.current.name
 }
+
+output "instance_iam_policy" {
+  description = "An IAM policy that can be attached to target instances to give them access to write logs to S3"
+  value       = aws_iam_policy.instances
+}
