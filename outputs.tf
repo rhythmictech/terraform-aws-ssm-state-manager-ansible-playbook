@@ -20,5 +20,9 @@ output "region" {
 
 output "instance_iam_policy" {
   description = "An IAM policy that can be attached to target instances to give them access to write logs to S3"
-  value       = aws_iam_policy.instances
+  value = {
+    arn  = aws_iam_policy.instances.arn
+    name = aws_iam_policy.instances.name
+    path = aws_iam_policy.instances.path
+  }
 }
