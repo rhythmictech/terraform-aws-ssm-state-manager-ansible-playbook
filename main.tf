@@ -52,7 +52,7 @@ resource "aws_ssm_association" "this" {
 
   targets {
     key    = "tag:${var.target_tag_key}"
-    values = try([var.target_tag_value], null)
+    values = [var.target_tag_value]
   }
 }
 
