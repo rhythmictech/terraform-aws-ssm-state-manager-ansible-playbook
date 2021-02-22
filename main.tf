@@ -31,7 +31,7 @@ resource "aws_ssm_association" "this" {
   compliance_severity = var.compliance_severity
   max_concurrency     = var.max_concurrency
   max_errors          = var.max_errors
-  name                = "AWS-RunAnsiblePlaybook"
+  name                = "AWS-ApplyAnsiblePlaybooks"
   schedule_expression = var.schedule_expression
 
 
