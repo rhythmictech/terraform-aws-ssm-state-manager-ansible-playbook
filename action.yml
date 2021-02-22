@@ -1,0 +1,36 @@
+---
+name: Publish ${{ secrets.AWS_S3_ANSIBLE_FILENAME }}
+on:
+  push:
+    branches:
+      - master
+      - main
+      - gh-action
+    paths:
+      - amzn2/**
+      - .github/workflows/amzn2.yml
+
+jobs:
+  Build_and_Publish_Amzn2:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: amzn2
+    steps:
+      - uses: actions/checkout@v2
+      - name: Check for dependencies
+        id: check_requirements
+        uses: andstor/file-existence-action@v1
+        with:
+          files: requirements.yml
+      - name: Install dependencies
+        run: ansible-galaxy install -r requirements.yml -p galaxy-roles
+        if: steps.check_requirements.outputs.files_exists == 'true'
+      - name: Create Zip
+        run: zip ../${{ secrets.AWS_S3_ANSIBLE_FILENAME }} -r *
+      - name: upload zip
+        run: aws s3 cp ../${{ secrets.AWS_S3_ANSIBLE_FILENAME }} s3://${{ secrets.AWS_S3_ANSIBLE_BUCKET }}${{ secrets.AWS_S3_ANSIBLE_PREFIX }}/${{ secrets.AWS_S3_ANSIBLE_FILENAME }}
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
