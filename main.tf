@@ -10,7 +10,7 @@ locals {
   log_bucket_name = coalesce(var.log_bucket_name, aws_s3_bucket.this.id)
 }
 
-# tfsec:ignore:AWS002
+# tfsec:ignore:AWS002 tfsec:ignore:AWS077
 resource "aws_s3_bucket" "this" {
   bucket_prefix = substr(var.name, 0, 37)
   tags          = var.tags
