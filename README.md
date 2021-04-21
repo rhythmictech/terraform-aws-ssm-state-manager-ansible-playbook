@@ -15,7 +15,7 @@ N/A for now
 Terraform module that sets up the needed resources for an SSM State Manager association.
 
 ## Additional Setup
-Whatever Instances this is running against need IAM permissions to write to the bucket you're logging to (either created by this module or external), the SSM agent, IAM permissions to talk to SSM, and network permissions to talk to SSM. This module creates an IAM policy with the correct permissions to write logs, and you can simply attach that policy to any existing IAM roles, as well as the `AmazonSSMManagedInstanceCore` policy. Network access to SSM is left as an excercise for the reader. You'll also need to have those instances tagged as indicated in `var.target_tag_key` and `var.target_tag_value`
+Whatever Instances this is running against need IAM permissions to write to the bucket you're logging to (either created by this module or external), the SSM agent, IAM permissions to talk to SSM, and network permissions to talk to SSM. This module creates an IAM policy with the correct permissions to write logs, and you can simply attach that policy to any existing IAM roles, as well as the `AmazonSSMManagedInstanceCore` policy. Network access to SSM is left as an exercise for the reader. You'll also need to have those instances tagged as indicated in `var.target_tag_key` and `var.target_tag_value`
 
 After running this module, you'll need to set up a GitHub action in the repo that houses your Ansible playbook for building the zip file. You can use [action.yml](action.yml) as a template. This template requires the following secrets be set:
 - `AWS_S3_ANSIBLE_BUCKET` (Available as a Terraform output)
