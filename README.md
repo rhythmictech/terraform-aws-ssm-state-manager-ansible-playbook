@@ -81,7 +81,7 @@ No modules.
 | <a name="input_s3_log_prefix"></a> [s3\_log\_prefix](#input\_s3\_log\_prefix) | Path prefix where logs will be stored in S3 | `string` | `"logs/state_manager"` | no |
 | <a name="input_schedule_expression"></a> [schedule\_expression](#input\_schedule\_expression) | A 6-field cron expression when the association will be applied to the target(s) | `string` | `null` | no |
 | <a name="input_tags"></a> [tags](#input\_tags) | User-Defined tags | `map(string)` | `{}` | no |
-| <a name="input_target_tag_value"></a> [target\_tag\_value](#input\_target\_tag\_value) | The AWS Tag value that you want to target for running the playbook. If omitted any instance with the key will be targetted regardless of value | `string` | `"*"` | no |
+| <a name="input_target_tag_value"></a> [target\_tag\_value](#input\_target\_tag\_value) | The AWS Tag value that you want to target for running the playbook. If omitted any instance with the key will be targeted regardless of value | `string` | `"*"` | no |
 
 ## Outputs
 

@@ -104,7 +104,7 @@ variable "target_tag_key" {
 
 variable "target_tag_value" {
   default     = "*"
-  description = "The AWS Tag value that you want to target for running the playbook. If omitted any instance with the key will be targetted regardless of value"
+  description = "The AWS Tag value that you want to target for running the playbook. If omitted any instance with the key will be targeted regardless of value"
   type        = string
 }
 
